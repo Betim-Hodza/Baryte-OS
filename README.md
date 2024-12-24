@@ -1,5 +1,10 @@
-# image-template
+# Baryte-OS
+* a customized image of silver blue / aurora / bazzite OS
+* Goal is to have a flex between programming and gaming, having predefined tools to program and have the necessary components for good steam gaming
+* and maybe some of my own little quirks in there
 
+---
+# Universal Blue's template
 # Purpose
 
 This repository is meant to be a template for building your own custom Universal Blue image. This template is the recommended way to make customizations to any image published by the Universal Blue Project:
