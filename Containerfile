@@ -5,7 +5,15 @@ FROM ghcr.io/ublue-os/bazzite-deck:latest
 COPY --chmod=755 build.sh /tmp/build.sh
 COPY --chmod=755 files/ /
 
-# Update system and install programming tools
+# Enable RPM Fusion repositories
+RUN rpm-ostree install \
+    https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm \
+    https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
+
+# Enable VSCode repository
+RUN rpm --import https://packages.microsoft.com/keys/microsoft.asc && \
+    printf "[vscode]\nname=vscode\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" > /etc/yum.repos.d/vscode.repo
+# Install packages in groups to better handle dependencies
 RUN rpm-ostree install \
     # Development tools
     gcc \
@@ -15,50 +23,38 @@ RUN rpm-ostree install \
     python3-pip \
     nodejs \
     vim \
-    code \
-    # Build essentials
     make \
     autoconf \
-    automake \
-    # Gaming optimizations from Aurora
+    automake && \
+    rpm-ostree cleanup -m
+
+# Install VSCode separately
+RUN rpm-ostree install \
+    code && \
+    rpm-ostree cleanup -m
+
+# Install gaming tools
+RUN rpm-ostree install \
     gamemode \
     mangohud \
     goverlay \
-    lutris \
-    # Custom gaming tools
-    discord \
-    steam \
-    heroic-games-launcher \
-    # Clean up
-    && rpm-ostree cleanup -m && \
-    systemctl enable gamemoded
+    steam && \
+    rpm-ostree cleanup -m
 
-# Install VS Code extensions
-RUN mkdir -p /usr/share/code/extensions && \
-    code --install-extension ms-python.python \
-    code --install-extension 1YiB.rust-bundle \
-    code --install-extension rust-lang.rust-analyzer \
-    code --install-extension dustypomerleau.rust-syntax \
-    code --install-extension golang.go \
-    code --install-extension ms-vscode.cpptools \
-    code --install-exension Nuxtr.nuxt-vscode-extentions \
-    code --install-extension Nuxtr.nuxtr-vscode \
-    code --install-extension Vue.volar \
-    code --install-extension bradlc.vscode-tailwindcss \
-    code --install-extension KristopherJafeth.gojo-theme
-     
+# Install additional gaming tools from RPM Fusion
+RUN rpm-ostree install \
+    lutris \
+    discord \
+    heroic-games-launcher && \
+    rpm-ostree cleanup -m
 
 # Setup gaming optimizations
 RUN echo "STEAM_RUNTIME=1" >> /etc/environment && \
-    echo "STEAM_RUNTIME_HEAVY=1" >> /etc/environment
-
-# Configure system optimization
-RUN echo "vm.swappiness=10" >> /etc/sysctl.d/99-sysctl.conf && \
-    echo "vm.vfs_cache_pressure=50" >> /etc/sysctl.d/99-sysctl.conf
+    echo "STEAM_RUNTIME_HEAVY=1" >> /etc/environment && \
+    systemctl enable gamemoded
 
 LABEL com.github.containers.toolbox="true" \
       name="baryte-os" \
       description="Custom OS combining programming and gaming features" \
       vendor="Baryte OS" \
       version="1.0"
-
