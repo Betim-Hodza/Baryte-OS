@@ -3,6 +3,28 @@
 * Goal is to have a flex between programming and gaming, having predefined tools to program and have the necessary components for good steam gaming
 * and maybe some of my own little quirks in there
 
+## image-template
+* To Build
+```
+podman build -t baryte-os .
+```
+* To explore the podman container
+```
+podman run -it localhost/baryte-os:latest /bin/bash
+```
+
+* if you want contianer to remove when exiting 
+```
+podman run -it --rm localhost/baryte-os:latest /bin/bash
+```
+* To View Containers
+```
+podman ps -a
+```
+* To remove containers
+```
+podman rm -f <container-name>
+```
 ---
 # Universal Blue's template
 # Purpose
