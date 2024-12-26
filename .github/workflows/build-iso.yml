@@ -13,8 +13,8 @@ on:
     - cron: "0 0 * * 0"  # Weekly rebuild on Sundays
 
 env:
-  IMAGE_NAME: baryte-os
-  IMAGE_REGISTRY: ghcr.io/${{ github.repository_owner }}
+  IMAGE_NAME: ${{ lower('baryte-os') }}
+  IMAGE_REGISTRY: ${{ format('ghcr.io/{0}', lower(github.repository_owner)) }}
 
 jobs:
   build-container:
