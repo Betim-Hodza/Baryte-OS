@@ -1,59 +1,64 @@
-## 1. BUILD ARGS
-# These allow changing the produced image by passing different build args to adjust
-# the source from which your image is built.
-# Build args can be provided on the commandline when building locally with:
-#   podman build -f Containerfile --build-arg FEDORA_VERSION=40 -t local-image
+# Start from Universal Blue's Bazzite image for gaming support
+FROM ghcr.io/ublue-os/bazzite-deck:latest
 
-# SOURCE_IMAGE arg can be anything from ublue upstream which matches your desired version:
-# See list here: https://github.com/orgs/ublue-os/packages?repo_name=main
-# - "silverblue"
-# - "kinoite"
-# - "sericea"
-# - "onyx"
-# - "lazurite"
-# - "vauxite"
-# - "base"
-#
-#  "aurora", "bazzite", "bluefin" or "ucore" may also be used but have different suffixes.
-ARG SOURCE_IMAGE="silverblue"
+# Copy custom files
+COPY --chmod=755 build.sh /tmp/build.sh
+COPY --chmod=755 files/ /
 
-## SOURCE_SUFFIX arg should include a hyphen and the appropriate suffix name
-# These examples all work for silverblue/kinoite/sericea/onyx/lazurite/vauxite/base
-# - "-main"
-# - "-nvidia"
-# - "-asus"
-# - "-asus-nvidia"
-# - "-surface"
-# - "-surface-nvidia"
-#
-# aurora, bazzite and bluefin each have unique suffixes. Please check the specific image.
-# ucore has the following possible suffixes
-# - stable
-# - stable-nvidia
-# - stable-zfs
-# - stable-nvidia-zfs
-# - (and the above with testing rather than stable)
-ARG SOURCE_SUFFIX="-main"
+# Update system and install programming tools
+RUN rpm-ostree install \
+    # Development tools
+    gcc \
+    clang \
+    cmake \
+    git \
+    python3-pip \
+    nodejs \
+    vim \
+    code \
+    # Build essentials
+    make \
+    autoconf \
+    automake \
+    # Gaming optimizations from Aurora
+    gamemode \
+    mangohud \
+    goverlay \
+    lutris \
+    # Custom gaming tools
+    discord \
+    steam \
+    heroic-games-launcher \
+    # Clean up
+    && rpm-ostree cleanup -m && \
+    systemctl enable gamemoded
 
-## SOURCE_TAG arg must be a version built for the specific image: eg, 39, 40, gts, latest
-ARG SOURCE_TAG="latest"
+# Install VS Code extensions
+RUN mkdir -p /usr/share/code/extensions && \
+    code --install-extension ms-python.python \
+    code --install-extension 1YiB.rust-bundle \
+    code --install-extension rust-lang.rust-analyzer \
+    code --install-extension dustypomerleau.rust-syntax \
+    code --install-extension golang.go \
+    code --install-extension ms-vscode.cpptools \
+    code --install-exension Nuxtr.nuxt-vscode-extentions \
+    code --install-extension Nuxtr.nuxtr-vscode \
+    code --install-extension Vue.volar \
+    code --install-extension bradlc.vscode-tailwindcss \
+    code --install-extension KristopherJafeth.gojo-theme
+     
 
+# Setup gaming optimizations
+RUN echo "STEAM_RUNTIME=1" >> /etc/environment && \
+    echo "STEAM_RUNTIME_HEAVY=1" >> /etc/environment
 
-### 2. SOURCE IMAGE
-## this is a standard Containerfile FROM using the build ARGs above to select the right upstream image
-FROM ghcr.io/ublue-os/${SOURCE_IMAGE}${SOURCE_SUFFIX}:${SOURCE_TAG}
+# Configure system optimization
+RUN echo "vm.swappiness=10" >> /etc/sysctl.d/99-sysctl.conf && \
+    echo "vm.vfs_cache_pressure=50" >> /etc/sysctl.d/99-sysctl.conf
 
+LABEL com.github.containers.toolbox="true" \
+      name="baryte-os" \
+      description="Custom OS combining programming and gaming features" \
+      vendor="Baryte OS" \
+      version="1.0"
 
-### 3. MODIFICATIONS
-## make modifications desired in your image and install packages by modifying the build.sh script
-## the following RUN directive does all the things required to run "build.sh" as recommended.
-
-COPY build.sh /tmp/build.sh
-
-RUN mkdir -p /var/lib/alternatives && \
-    /tmp/build.sh && \
-    ostree container commit
-## NOTES:
-# - /var/lib/alternatives is required to prevent failure with some RPM installs
-# - All RUN commands must end with ostree container commit
-#   see: https://coreos.github.io/rpm-ostree/container/#using-ostree-container-commit
