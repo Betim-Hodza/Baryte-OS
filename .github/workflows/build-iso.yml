@@ -14,7 +14,7 @@ on:
 
 env:
   IMAGE_NAME: baryte-os
-  IMAGE_REGISTRY: ghcr.io/betim-hodza
+  IMAGE_REGISTRY: ghcr.io/
 
 jobs:
   build-container:
@@ -53,6 +53,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
+          file: ./Containerfile  # Specify the Containerfile explicitly
           platforms: linux/amd64,linux/arm64
           push: ${{ github.event_name != 'pull_request' }}
           tags: |
