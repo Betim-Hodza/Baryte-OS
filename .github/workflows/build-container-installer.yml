@@ -1,24 +1,31 @@
-- name: baryte-os
-  uses: jasonn3/build-container-installer@main
-  id: build
-  with:
-    arch: x86_64  # Adjust if using a different architecture
-    image_name: baryte-os  # Your OS name
-    image_repo: ghcr.io/betim-hodza  # The repository where your image is stored (change as needed)
-    image_tag: latest  # Use your version tag or leave as 'latest'
-    version: 1.0  # Version of your OS (change as needed)
-    variant: standard  # You can specify a variant if required by the repo, otherwise leave it as 'standard'
-    iso_name: baryte-os-latest-1.0.iso  # Output ISO file name, adjust based on your naming convention
+jobs:
+  build:
+    runs-on: ubuntu-latest
 
-# This example is for uploading your ISO as a Github artifact. You can do something similar using any cloud storage, so long as you copy the output
-- name: Upload ISO as artifact
-  id: upload
-  uses: actions/upload-artifact@v4
-  with:
-    name: ${{ steps.build.outputs.iso_name }}
-    path: |
-      ${{ steps.build.outputs.iso_path }}
-      ${{ steps.build.outputs.iso_path }}-CHECKSUM
-    if-no-files-found: error
-    retention-days: 0
-    compression-level: 0
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Build ISO
+        uses: jasonn3/build-container-installer@main
+        id: build
+        with:
+          arch: x86_64  # Adjust if using a different architecture
+          image_name: baryte-os  # Your OS name
+          image_repo: ghcr.io/betim-hodza  # The repository where your image is stored (change as needed)
+          image_tag: latest  # Use your version tag or leave as 'latest'
+          version: 1.0  # Version of your OS (change as needed)
+          variant: standard  # You can specify a variant if required by the repo, otherwise leave it as 'standard'
+          iso_name: baryte-os-latest-1.0.iso  # Output ISO file name, adjust based on your naming convention
+
+      - name: Upload ISO as artifact
+        id: upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.build.outputs.iso_name }}
+          path: |
+            ${{ steps.build.outputs.iso_path }}
+            ${{ steps.build.outputs.iso_path }}-CHECKSUM
+          if-no-files-found: error
+          retention-days: 0
+          compression-level: 0
