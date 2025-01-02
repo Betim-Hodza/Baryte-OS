@@ -1,7 +1,10 @@
-# Gaming environment variables
-export STEAM_RUNTIME=1
-export STEAM_RUNTIME_HEAVY=1
+#!/bin/bash
+# Add Bun to path
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
 
-# Development environment setup
-export GOPATH=$HOME/go
-export PATH=$PATH:$GOPATH/bin
+# Add local bin to path
+export PATH="$HOME/.local/bin:$PATH"
+
+# Set development environment variables
+export EDITOR=vim
