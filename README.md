@@ -25,6 +25,15 @@ sudo podman run --rm --privileged \
     VARIANT="Silverblue"
 ```
 
+### Verification
+These images are signed with Sisgstore's Cosign. You can verify the signature by downloading the cosign.pub key from this repo and running the following command:
+```
+cosign verify --key cosign.pub ghcr.io/aguslr/bluevanilla
+```
+
+#### Many thanks to
+* https://github.com/aguslr/bluevanilla/tree/main?tab=readme-ov-file
+
 ## image-template
 * To Build
 ```
