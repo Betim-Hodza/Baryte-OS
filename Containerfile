@@ -81,12 +81,6 @@ RUN rpm-ostree install \
     mangohud && \
     rpm-ostree cleanup -m
 
-# Install Razer tools after kernel headers are available
-RUN rpm-ostree install \
-    openrazer-meta \
-    razergenie && \
-    rpm-ostree cleanup -m
-
 # Install EmuDeck dependencies
 RUN rpm-ostree install \
     flatpak && \
