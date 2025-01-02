@@ -8,6 +8,10 @@ unverified rebase
 ```
 rpm-ostree rebase -r ostree-unverified-registry:ghcr.io/betim-hodza/baryte-os:latest
 ```
+signed after rebasing
+```
+rpm-ostree rebase -r ostree-image-signed:docker://ghcr.io/betim-hodza/baryte-os:latest
+```
 
 building iso:
 ```
