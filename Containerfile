@@ -1,4 +1,4 @@
-ARG FEDORA_MAJOR_VERSION=39
+ARG FEDORA_MAJOR_VERSION=41
 
 FROM quay.io/fedora/fedora-silverblue:${FEDORA_MAJOR_VERSION}
 
@@ -8,8 +8,8 @@ COPY --chmod=755 files/ /
 
 # Enable RPM Fusion and VSCode repositories
 RUN rpm-ostree install \
-    https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-39.noarch.rpm \
-    https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-39.noarch.rpm && \
+    https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-41.noarch.rpm \
+    https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-41.noarch.rpm && \
     rpm-ostree cleanup -m
 
 # Add VSCode repo
