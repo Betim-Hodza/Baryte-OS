@@ -22,7 +22,7 @@ sudo podman run --rm --privileged \
     IMAGE_REPO="ghcr.io/betim-hodza" \
     IMAGE_NAME="baryte-os" \
     IMAGE_TAG="latest" \
-    VARIANT="Silverblue"
+    VARIANT="Kinoite"
 ```
 
 ### Verification
