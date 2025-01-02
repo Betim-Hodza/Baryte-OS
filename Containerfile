@@ -79,8 +79,6 @@ RUN rpm-ostree install \
     steam \
     gamemode \
     mangohud && \
-    kernel-devel \
-    kernel-headers && \
     rpm-ostree cleanup -m
 
 # Install Razer tools after kernel headers are available
