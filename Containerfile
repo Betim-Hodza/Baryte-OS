@@ -16,6 +16,12 @@ RUN rpm-ostree install \
 RUN curl -fsSL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > /etc/yum.repos.d/packages.microsoft.gpg && \
     echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" > /etc/yum.repos.d/vscode.repo
 
+# kernel headers
+RUN rpm-ostree install \
+    kernel-devel \
+    kernel-headers && \
+    rpm-ostree cleanup -m
+
 # Install NVIDIA drivers if needed (commented out by default)
 RUN rpm-ostree install \
      akmod-nvidia \
