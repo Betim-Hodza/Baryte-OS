@@ -1,3 +1,10 @@
+name: Build and Upload ISO
+
+on:
+  push:
+    branches:
+      - main  # Adjust if you're using a different branch
+
 jobs:
   build:
     runs-on: ubuntu-latest
