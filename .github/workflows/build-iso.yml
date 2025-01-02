@@ -107,7 +107,7 @@ jobs:
 
       - name: Upload ISO as artifact
         if: "!startsWith(github.ref, 'refs/tags/')"
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: baryte-os-iso
           path: ${{ env.ISO_FILE }}
