@@ -1,14 +1,14 @@
-- name: Build ISO
+- name: baryte-os
   uses: jasonn3/build-container-installer@main
   id: build
   with:
-    arch: ${{ env.ARCH}}
-    image_name: ${{ env.IMAGE_NAME}}
-    image_repo: ${{ env.IMAGE_REPO}}
-    image_tag: ${{ env.IMAGE_TAG }}
-    version: ${{ env.VERSION }}
-    variant: ${{ env.VARIANT }}
-    iso_name: ${{ env.IMAGE_NAME }}-${{ env.IMAGE_TAG }}-${{ env.VERSION }}.iso
+    arch: x86_64  # Adjust if using a different architecture
+    image_name: baryte-os  # Your OS name
+    image_repo: ghcr.io/betim-hodza  # The repository where your image is stored (change as needed)
+    image_tag: latest  # Use your version tag or leave as 'latest'
+    version: 1.0  # Version of your OS (change as needed)
+    variant: standard  # You can specify a variant if required by the repo, otherwise leave it as 'standard'
+    iso_name: baryte-os-latest-1.0.iso  # Output ISO file name, adjust based on your naming convention
 
 # This example is for uploading your ISO as a Github artifact. You can do something similar using any cloud storage, so long as you copy the output
 - name: Upload ISO as artifact
