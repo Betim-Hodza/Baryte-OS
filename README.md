@@ -28,7 +28,7 @@ sudo podman run --rm --privileged \
 ### Verification
 These images are signed with Sisgstore's Cosign. You can verify the signature by downloading the cosign.pub key from this repo and running the following command:
 ```
-cosign verify --key cosign.pub ghcr.io/aguslr/bluevanilla
+cosign verify --key cosign.pub ghcr.io/betim-hodza/baryte-os
 ```
 
 #### Many thanks to
