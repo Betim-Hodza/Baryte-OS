@@ -16,13 +16,15 @@ rpm-ostree rebase -r ostree-image-signed:docker://ghcr.io/betim-hodza/baryte-os:
 building iso:
 ```
 sudo podman run --rm --privileged \
-    --volume .:/build-container-installer/build \
-    --security-opt label=disable --pull=newer \
+    --volume .:/build-container-installer/build:Z \
+    --security-opt label=disable \
+    --pull=always \
     ghcr.io/jasonn3/build-container-installer:latest \
     IMAGE_REPO="ghcr.io/betim-hodza" \
     IMAGE_NAME="baryte-os" \
     IMAGE_TAG="latest" \
-    VARIANT="Kinoite"
+    VARIANT="Kinoite" \
+    RELEASE="f41"
 ```
 
 ### Verification
