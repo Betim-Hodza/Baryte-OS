@@ -1,7 +1,25 @@
 # Baryte-OS
-* a customized image of silver blue / aurora / bazzite OS
+* a customized image of silver blue
 * Goal is to have a flex between programming and gaming, having predefined tools to program and have the necessary components for good steam gaming
 * and maybe some of my own little quirks in there
+
+## Rebasing
+unverified rebase
+```
+rpm-ostree rebase -r ostree-unverified-registry:ghcr.io/betim-hodza/baryte-os:latest
+```
+
+building iso:
+```
+sudo podman run --rm --privileged \
+    --volume .:/build-container-installer/build \
+    --security-opt label=disable --pull=newer \
+    ghcr.io/jasonn3/build-container-installer:latest \
+    IMAGE_REPO="ghcr.io/betim-hodza" \
+    IMAGE_NAME="baryte-os" \
+    IMAGE_TAG="latest" \
+    VARIANT="Silverblue"
+```
 
 ## image-template
 * To Build
